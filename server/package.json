@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "gulp": "~3.5.1",
+    "gulp-util": "~2.2.14",
+    "gulp-zip": "git://github.com/emmerich/gulp-zip.git#master",
+    "gulp-clean": "~0.2.4",
+    "gulp-flatten": "0.0.2"
+  }
+}
