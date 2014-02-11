@@ -4,7 +4,14 @@
     <title>Macros</title>
 </head>
 <body>
-    <input type="button" value="Run" id="run" />
+    <p>Server hosted at http://localhost:8888</p>
+    <div>
+        Endpoints:
+        <ul>
+            <li>/run</li>
+            <li>/list</li>
+        </ul>
+    </div>
     <script>
         var application = require("./app/Application.js");
         application.initialize(document.body);

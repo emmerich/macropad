@@ -1,4 +1,7 @@
 {
-	"name": "macropad-server",
-	"main": "index.html"
+  "name": "macropad-server",
+  "main": "index.html",
+  "dependencies": {
+    "express": "~3.4.8"
+  }
 }
