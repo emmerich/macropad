@@ -1,12 +1,22 @@
 package org.emmerich.macropad;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
 import org.emmerich.macropad.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -48,7 +58,7 @@ public class HomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
         setContentView(R.layout.activity_home);
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
@@ -122,6 +132,51 @@ public class HomeActivity extends Activity {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100);
+    }
+    
+    public void findServers(View view) throws IOException {
+    	new FindServers().execute();
+    }
+    
+    
+    
+    private class FindServers extends AsyncTask {
+
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			try
+			{
+				String data = "hello";
+				
+		    	DatagramSocket socket = new DatagramSocket(41234);
+		    	socket.setBroadcast(true);
+		    	socket.setSoTimeout(1000);
+		    	
+		    	DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), getBroadcastAddress(), 41234);
+		    	socket.send(packet);
+
+//		    	byte[] buf = new byte[1024];
+//		    	DatagramPacket receivePacket = new DatagramPacket(buf, buf.length);
+//		    	socket.receive(receivePacket);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+			
+	    	return null;
+		}
+		
+		InetAddress getBroadcastAddress() throws IOException {
+	        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+	        DhcpInfo dhcp = wifi.getDhcpInfo();
+	        // handle null somehow
+
+	        int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+	        byte[] quads = new byte[4];
+	        for (int k = 0; k < 4; k++)
+	          quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+	        return InetAddress.getByAddress(quads);
+	    }
+    	
     }
 
 
