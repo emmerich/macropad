@@ -1,0 +1,7 @@
+.idea
+bin
+node_modules
+gen
+.classpath
+.project
+.settings
